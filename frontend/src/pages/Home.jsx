@@ -9,20 +9,37 @@ export default function Home() {
 
   useEffect(() => {
     let mounted = true;
-    apiClient
-      .get("/subjects")
-      .then((res) => {
-        if (!mounted) return;
-        setSubjects(res.data.items || []);
-      })
-      .catch((err) => {
-        if (!mounted) return;
-        setError(err?.response?.data?.message || "Failed to load subjects");
-      })
-      .finally(() => {
-        if (!mounted) return;
-        setLoading(false);
-      });
+    async function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function loadSubjectsWithRetry() {
+      const delays = [0, 2000, 4000];
+      let lastError = null;
+
+      for (let i = 0; i < delays.length; i += 1) {
+        if (delays[i] > 0) await sleep(delays[i]);
+        try {
+          const res = await apiClient.get("/subjects");
+          if (!mounted) return;
+          setSubjects(res.data.items || []);
+          setError("");
+          return;
+        } catch (err) {
+          lastError = err;
+        }
+      }
+
+      if (!mounted) return;
+      const apiBase = apiClient.defaults.baseURL || "";
+      const msg = lastError?.response?.data?.message || lastError?.message || "Failed to load subjects";
+      setError(`${msg} (API: ${apiBase})`);
+    }
+
+    loadSubjectsWithRetry().finally(() => {
+      if (!mounted) return;
+      setLoading(false);
+    });
 
     return () => {
       mounted = false;
