@@ -17,8 +17,9 @@ const env = {
     accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "30d"
   },
-  corsOrigin: process.env.CORS_ORIGIN || "http://localhost:5173",
-  cookieDomain: process.env.COOKIE_DOMAIN || "localhost",
+  corsOrigin: process.env.CORS_ORIGIN || "",
+  cookieDomain: process.env.COOKIE_DOMAIN || "",
+  allowVercelOrigins: process.env.ALLOW_VERCEL_ORIGINS !== "false",
   nodeEnv: process.env.NODE_ENV || "development"
 };
 

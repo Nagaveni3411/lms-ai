@@ -17,3 +17,7 @@
 - Aiven MySQL SSL is enabled via `DB_SSL=true`.
 - Refresh token is HTTP-only cookie; access token is bearer token.
 - Video locking/ordering is enforced server-side in `backend/src/utils/ordering.js`.
+- For Render + Vercel, set backend env:
+  - `CORS_ORIGIN=https://your-frontend.vercel.app`
+  - `ALLOW_VERCEL_ORIGINS=true`
+  - `COOKIE_DOMAIN=` (empty unless you use a shared custom domain)

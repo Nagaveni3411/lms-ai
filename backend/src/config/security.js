@@ -2,6 +2,7 @@ const cors = require("cors");
 const env = require("./env");
 
 const isProduction = env.nodeEnv === "production";
+const vercelRegex = /^https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/;
 
 function buildAllowedOrigins() {
   const configured = String(env.corsOrigin || "")
@@ -21,6 +22,7 @@ const allowedOrigins = buildAllowedOrigins();
 function isAllowedOrigin(origin) {
   if (!origin) return true; // non-browser clients
   if (allowedOrigins.includes(origin)) return true;
+  if (env.allowVercelOrigins && vercelRegex.test(origin)) return true;
   if (!isProduction && /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return true;
   return false;
 }
@@ -30,7 +32,8 @@ const corsMiddleware = cors({
     if (isAllowedOrigin(origin)) return callback(null, true);
     return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 204
 });
 
 const refreshCookieName = "refresh_token";
@@ -38,10 +41,13 @@ const refreshCookieOptions = {
   httpOnly: true,
   secure: isProduction,
   sameSite: isProduction ? "none" : "lax",
-  domain: env.cookieDomain,
   path: "/api/auth",
   maxAge: 30 * 24 * 60 * 60 * 1000
 };
+
+if (env.cookieDomain) {
+  refreshCookieOptions.domain = env.cookieDomain;
+}
 
 module.exports = {
   corsMiddleware,
