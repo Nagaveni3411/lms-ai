@@ -43,6 +43,7 @@ function isAllowedOrigin(origin) {
 const corsMiddleware = cors({
   origin(origin, callback) {
     if (isAllowedOrigin(origin)) return callback(null, true);
+    if (!env.corsStrict) return callback(null, true);
     return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
   credentials: true,

@@ -21,6 +21,7 @@ const env = {
   corsOrigin: process.env.CORS_ORIGIN || "",
   cookieDomain: process.env.COOKIE_DOMAIN || "",
   allowVercelOrigins: process.env.ALLOW_VERCEL_ORIGINS !== "false",
+  corsStrict: process.env.CORS_STRICT === "true",
   nodeEnv: process.env.NODE_ENV || "development"
 };
 
