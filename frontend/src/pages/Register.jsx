@@ -16,7 +16,7 @@ export default function Register() {
       setError("");
       const data = await register(form);
       saveAuth({ user: data.user, accessToken: data.access_token });
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       setError(err?.response?.data?.message || "Registration failed");
     }

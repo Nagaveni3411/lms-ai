@@ -7,7 +7,7 @@
 body {
   font-family: "Public Sans", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #1f2937;
-  background: #f6f8fb;
+  background: radial-gradient(1200px 500px at 20% -10%, #e3ecff 0%, #f6f8fb 45%, #f6f8fb 100%);
 }
 
 #root {

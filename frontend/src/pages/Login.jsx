@@ -16,7 +16,7 @@ export default function Login() {
       setError("");
       const data = await login(form);
       saveAuth({ user: data.user, accessToken: data.access_token });
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       setError(err?.response?.data?.message || "Login failed");
     }

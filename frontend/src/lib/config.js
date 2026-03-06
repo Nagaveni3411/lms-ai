@@ -7,4 +7,9 @@ function detectDefaultApiBaseUrl() {
   return isLocal ? "http://localhost:5000" : "";
 }
 
-export const API_BASE_URL = envBaseUrl || detectDefaultApiBaseUrl();
+// In production, prefer same-origin requests so Vercel rewrites handle backend routing and avoid browser CORS issues.
+const isLocalRuntime =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+
+export const API_BASE_URL = isLocalRuntime ? envBaseUrl || detectDefaultApiBaseUrl() : "";
